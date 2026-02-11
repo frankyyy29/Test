@@ -75,15 +75,21 @@ npm start
 
 The app will open at `http://localhost:3000` and connect to the API at `https://intersys-payroll.onrender.com`.
 
-**Deployment:**
+**Deployment (Docker on Render - Recommended):**
 
-Deploy the frontend to Vercel, Netlify, or Render:
+The frontend includes a `Dockerfile` for containerized deployment, eliminating Node.js version conflicts:
 
-- **Vercel (recommended)**: Connect your GitHub repo and set Root Directory to `frontend`
+1. **Automated via `render.yaml`**: Render will automatically detect and deploy both backend and frontend as separate services from the manifest.
+2. **Manual deployment**: In Render, create a new Web Service, select "Docker" environment, and point to `frontend/Dockerfile`.
+3. The frontend will be served on port 3000 and will connect to the backend API (both on the same Render project).
+
+**Alternative Deployment Methods (Legacy):**
+
+- **Vercel**: Connect your GitHub repo and set Root Directory to `frontend`  
 - **Netlify**: Connect your GitHub repo, set Base directory to `frontend`, Build command to `npm run build`, Publish directory to `build`
 - **Render Static Site**: Build with `npm run build`, publish the `build/` directory
 
-See [frontend/README.md](frontend/README.md) for detailed deployment instructions.
+See [frontend/README.md](frontend/README.md) for detailed instructions.
 
 **Testing:**
 

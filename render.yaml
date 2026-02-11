@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: intersys-payroll
+    name: intersys-payroll-backend
     env: docker
     plan: free
     dockerfilePath: Dockerfile
@@ -9,3 +9,14 @@ services:
     envVars:
       - key: PORT
         value: "10000"
+  
+  - type: web
+    name: intersys-payroll-frontend
+    env: docker
+    plan: free
+    dockerfilePath: ./frontend/Dockerfile
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: PORT
+        value: "3000"
