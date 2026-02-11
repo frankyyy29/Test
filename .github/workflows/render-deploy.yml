@@ -11,26 +11,38 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Deploy to Render via API
+    - name: Deploy Backend to Render
       env:
         RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        RENDER_BACKEND_SERVICE_ID: ${{ secrets.RENDER_BACKEND_SERVICE_ID }}
       run: |
-        if [ -z "$RENDER_SERVICE_ID" ]; then
-          echo "RENDER_SERVICE_ID not set. Manual setup required:"
-          echo "1. Connect your GitHub repo to Render:"
-          echo "   https://dashboard.render.com"
-          echo "2. Create a new Web Service with Docker environment"
-          echo "3. Set RENDER_SERVICE_ID secret for auto-deployments"
-          exit 0
+        if [ -z "$RENDER_BACKEND_SERVICE_ID" ]; then
+          echo "⚠️  RENDER_BACKEND_SERVICE_ID not set"
+          echo "Setup: https://github.com/frankyyy29/Test/settings/secrets/actions"
+          echo "To get service ID: https://dashboard.render.com → select service → copy from URL"
+        else
+          echo "🚀 Deploying backend..."
+          curl -X POST https://api.render.com/v1/services/$RENDER_BACKEND_SERVICE_ID/deploys \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}'
+          echo "✅ Backend deployment triggered"
         fi
 
-        if [ -z "$RENDER_API_KEY" ]; then
-          echo "RENDER_API_KEY secret not set."
-          exit 1
+    - name: Deploy Frontend to Render
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        RENDER_FRONTEND_SERVICE_ID: ${{ secrets.RENDER_FRONTEND_SERVICE_ID }}
+      run: |
+        if [ -z "$RENDER_FRONTEND_SERVICE_ID" ]; then
+          echo "⚠️  RENDER_FRONTEND_SERVICE_ID not set"
+          echo "Setup: https://github.com/frankyyy29/Test/settings/secrets/actions"
+          echo "To get service ID: https://dashboard.render.com → select service → copy from URL"
+        else
+          echo "🚀 Deploying frontend..."
+          curl -X POST https://api.render.com/v1/services/$RENDER_FRONTEND_SERVICE_ID/deploys \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}'
+          echo "✅ Frontend deployment triggered"
         fi
-
-        # Trigger a deployment by calling Render API
-        curl -X POST https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys \
-          -H "Authorization: Bearer $RENDER_API_KEY" \
-          -H "Content-Type: application/json"
