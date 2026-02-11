@@ -56,10 +56,48 @@ To enable this:
 
 You can also manually create the service once and then the workflow will keep it updated.
 
-3. Run tests:
+React Frontend Dashboard
+
+A modern React web interface is available in the `frontend/` directory. The dashboard provides:
+- Employee management
+- Attendance tracking  
+- Payroll processing
+- Payslip downloads
+- Excel export
+
+**Local Development:**
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+The app will open at `http://localhost:3000` and connect to the API at `https://intersys-payroll.onrender.com`.
+
+**Deployment:**
+
+Deploy the frontend to Vercel, Netlify, or Render:
+
+- **Vercel (recommended)**: Connect your GitHub repo and set Root Directory to `frontend`
+- **Netlify**: Connect your GitHub repo, set Base directory to `frontend`, Build command to `npm run build`, Publish directory to `build`
+- **Render Static Site**: Build with `npm run build`, publish the `build/` directory
+
+See [frontend/README.md](frontend/README.md) for detailed deployment instructions.
+
+**Testing:**
+
+Backend tests:
 
 ```bash
 pytest -q
+```
+
+Frontend tests (if added):
+
+```bash
+cd frontend
+npm test
 ```
 
 Data files (SQLite) will be created under `data/payroll.db`. Put that `data/` folder inside a Google Drive-synced directory if you want it backed up.
