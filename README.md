@@ -77,17 +77,33 @@ The app will open at `http://localhost:3000` and connect to the API at `https://
 
 **Deployment (Docker on Render - Recommended):**
 
-The frontend includes a `Dockerfile` for containerized deployment, eliminating Node.js version conflicts:
+Since the frontend has been migrated to Vite for reliable builds, deployment is now straightforward:
 
-1. **Automated via `render.yaml`**: Render will automatically detect and deploy both backend and frontend as separate services from the manifest.
-2. **Manual deployment**: In Render, create a new Web Service, select "Docker" environment, and point to `frontend/Dockerfile`.
-3. The frontend will be served on port 3000 and will connect to the backend API (both on the same Render project).
+1. **Frontend & Backend together via `render.yaml`**: 
+   - Push to GitHub
+   - Render automatically detects the manifest and deploys both services
+   - Backend runs on port 10000, Frontend on port 3000 (separate services on same project)
 
-**Alternative Deployment Methods (Legacy):**
+2. **Frontend only via Docker**:
+   - Create a Web Service in Render
+   - Connect your GitHub repo
+   - Select "Docker" environment
+   - Render will use `frontend/Dockerfile` automatically
 
-- **Vercel**: Connect your GitHub repo and set Root Directory to `frontend`  
-- **Netlify**: Connect your GitHub repo, set Base directory to `frontend`, Build command to `npm run build`, Publish directory to `build`
-- **Render Static Site**: Build with `npm run build`, publish the `build/` directory
+3. **Automated via GitHub Actions**:
+   - The workflow `.github/workflows/render-deploy.yml` can trigger deployments via Render API
+   - Set `RENDER_API_KEY` and `RENDER_SERVICE_ID` secrets in GitHub
+
+**Why Vite instead of react-scripts?**
+- react-scripts 5.0.1 has hard dependency conflicts with Node.js 20+ (all modern deployment platforms use Node 20-24)
+- Vite is modern, fast, and has zero version conflicts
+- Build time: ~2-3 seconds vs 30-60 seconds with react-scripts
+- Both are production-ready
+
+**Alternative Deployment Methods (if not using Docker):**
+
+- **Vercel**: Set Root Directory to `frontend`, Build Command to `npm run build`, Output to `dist`
+- **Netlify**: Set Base directory to `frontend`, Build command to `npm run build`, Publish to `dist`
 
 See [frontend/README.md](frontend/README.md) for detailed instructions.
 
