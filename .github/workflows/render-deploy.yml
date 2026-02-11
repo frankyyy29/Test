@@ -11,13 +11,26 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install Render CLI
-      run: |
-        npm install -g render-cli
-
-    - name: Deploy to Render
+    - name: Deploy to Render via API
       env:
         RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
       run: |
-        render create-service --project-id ${{ secrets.RENDER_PROJECT_ID }} render.yaml || \
-        render deploy --service-id ${{ secrets.RENDER_SERVICE_ID }}
+        if [ -z "$RENDER_SERVICE_ID" ]; then
+          echo "RENDER_SERVICE_ID not set. Manual setup required:"
+          echo "1. Connect your GitHub repo to Render:"
+          echo "   https://dashboard.render.com"
+          echo "2. Create a new Web Service with Docker environment"
+          echo "3. Set RENDER_SERVICE_ID secret for auto-deployments"
+          exit 0
+        fi
+
+        if [ -z "$RENDER_API_KEY" ]; then
+          echo "RENDER_API_KEY secret not set."
+          exit 1
+        fi
+
+        # Trigger a deployment by calling Render API
+        curl -X POST https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys \
+          -H "Authorization: Bearer $RENDER_API_KEY" \
+          -H "Content-Type: application/json"
