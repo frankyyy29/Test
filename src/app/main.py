@@ -20,6 +20,22 @@ app.include_router(attendance.router)
 app.include_router(payroll.router)
 
 
+@app.get("/")
+def root():
+    return {
+        "app": "Intersys I3 Payroll - MVP",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "openapi": "/openapi.json",
+        "health": "/health",
+        "endpoints": {
+            "employees": "POST /employees/, GET /employees/",
+            "attendance": "POST /attendance/{employee_id}/records, GET /attendance/{employee_id}/records",
+            "payroll": "POST /payroll/run, GET /payroll/runs/{run_id}/payslips, GET /payroll/runs/{run_id}/payslip/{employee_id}/pdf, GET /payroll/runs/{run_id}/export/summary.xlsx"
+        }
+    }
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
