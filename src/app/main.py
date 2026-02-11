@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from .db import create_db_and_tables
 from .routers import employees, attendance, payroll
@@ -6,6 +7,15 @@ from .utils.env_loader import load_from_files
 
 
 app = FastAPI(title="Intersys I3 Payroll - MVP")
+
+# Enable CORS for frontend access
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, restrict to specific domains
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
