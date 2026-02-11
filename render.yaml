@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: intersys-payroll
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: PORT
+        value: "10000"
