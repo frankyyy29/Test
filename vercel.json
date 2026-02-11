@@ -1,17 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/build",
-  "routes": [
-    {
-      "src": "^/(?!api).*",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "https://intersys-payroll.onrender.com/api/$1"
-    }
-  ],
-  "env": {
-    "REACT_APP_API_URL": "https://intersys-payroll.onrender.com"
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "root": "frontend"
 }
